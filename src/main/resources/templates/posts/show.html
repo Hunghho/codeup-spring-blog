@@ -5,10 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Post</h1>
-<!--<h3 th:text="${postId}"></h3>-->
-<h3 th:text="${post.title}"></h3>
-<p th:text="${post.body}"></p>
+<nav th:replace="partials/navbar :: navbar"></nav>
 
+<h1>Post</h1>
+<!--<div th:replace="partials/post-card :: post(${post})"></div>-->
+<!--<h3 th:text="${postId}"></h3>-->
+<h3 th:text="${post.get().title}"></h3>
+<p th:text="${post.get().body}"></p>
+
+<footer th:replace="partials/navbar :: footer"></footer>
 </body>
 </html>

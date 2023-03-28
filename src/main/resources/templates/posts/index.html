@@ -5,10 +5,13 @@
     <title>Title</title>
 </head>
 <body>
+    <nav th:replace="partials/navbar :: navbar"></nav>
 <h1>Posts</h1>
 <div th:each="posts : ${posts}">
-    <a th:href="@{/post/{id}(id=${posts.id})}"><h2 th:text="${posts.title}"></h2></a>
-    <p th:text="${posts.body}"></p>
+    <div th:replace="partials/post-card :: post(${posts})"></div>
+<!--    <a th:href="@{/post/{id}(id=${posts.id})}"><h2 th:text="${posts.title}"></h2></a>-->
+<!--    <p th:text="${posts.body}"></p>-->
 </div>
+    <footer th:replace="partials/navbar :: footer"></footer>
 </body>
 </html>
