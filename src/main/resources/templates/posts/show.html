@@ -10,8 +10,9 @@
 <h1>Post</h1>
 <!--<div th:replace="partials/post-card :: post(${post})"></div>-->
 <!--<h3 th:text="${postId}"></h3>-->
-<h3 th:text="${post.get().title}"></h3>
-<p th:text="${post.get().body}"></p>
+<h3 th:text="${post.title}"></h3>
+<p th:text="${post.body}"></p>
+<h3 th:text="${userEmail.getEmail()}"></h3>
 
 <footer th:replace="partials/navbar :: footer"></footer>
 </body>
