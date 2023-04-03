@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="/partials/header :: header">
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+<h1>Edit post</h1>
+<div>
+  <form th:action="@{/posts/{id}/edit(id=${id})}" th:method="POST" th:object="${post}">
+    Title:
+    <input type="text" th:field="*{title}"/>
+    <div>
+      Body:
+      <textarea th:field="*{body}" rows="4" cols="50"></textarea>
+    </div>
+    <button>Submit</button>
+  </form>
+</div>
+</body>
+</html>

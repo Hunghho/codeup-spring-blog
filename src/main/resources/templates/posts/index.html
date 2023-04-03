@@ -7,11 +7,18 @@
 <body>
     <nav th:replace="partials/navbar :: navbar"></nav>
 <h1>Posts</h1>
-<div th:each="posts : ${posts}">
+<div th:each="post : ${posts}">
 <!--    <div th:replace="partials/post-card :: post(${posts})"></div>-->
-    <a th:href="@{/post/{id}(id=${posts.id})}"><h2 th:text="${posts.title}"></h2></a>
+    <a th:href="@{/post/{id}(id=${post.id})}"><h2 th:text="${post.title}"></h2></a>
 <!--    <p th:text="${posts.body}"></p>-->
+    <div th:if="${post.cats.size()>0}">
+        <h3>Categories</h3>
+        <p><span th:each="cat : ${post.cats}">
+            <span th:if="${catStat.index < post.cats.size()-1}" th:text="${cat.name} + ' - '"></span>
+            <span th:if="${catStat.index == post.cats.size()-1}" th:text="${cat.name}"></span>
+        </span></p>
+    </div>
 </div>
-    <footer th:replace="partials/navbar :: footer"></footer>
+
 </body>
 </html>

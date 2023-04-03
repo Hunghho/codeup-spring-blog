@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head th:replace="/partials/header :: header">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -8,13 +8,17 @@
 <nav th:replace="partials/navbar :: navbar"></nav>
 <h1>Creat post</h1>
 <div>
-  <form th:action="@{/posts/create}" th:method="POST">
-    <label for="title"> Title</label><br>
-      <input name="title" id="title" type="text"/>
+  <form th:action="@{/posts/create}" th:method="POST" th:object="${post}">
+    Title:
+      <input id="title" th:field="*{title}"/>
     <div>
-    <label for="body"> Body</label><br>
-    <textarea name="body" id="body" rows="4" cols="50"></textarea>
+    Body:
+    <textarea th:field="*{body}" id="body" rows="4" cols="50"></textarea>
     </div>
+<!--    <div>-->
+<!--      Enter categories separate by comma:-->
+<!--      <input th:field="*cats" id="cats"/>-->
+<!--    </div>-->
   <button>Submit</button>
   </form>
 </div>

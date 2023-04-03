@@ -2,6 +2,8 @@ package com.codeup.codeupspringblog.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name="posts")
 public class Post {
@@ -12,6 +14,14 @@ public class Post {
     private String title;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "post_cats",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "cat_id")
+    )
+    private Set<Category> cats;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
@@ -68,5 +78,13 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Category> getCats() {
+        return cats;
+    }
+
+    public void setCats(Set<Category> cats) {
+        this.cats = cats;
     }
 }
