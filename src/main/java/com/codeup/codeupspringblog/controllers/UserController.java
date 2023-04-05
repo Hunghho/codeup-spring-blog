@@ -4,12 +4,11 @@ import com.codeup.codeupspringblog.model.Post;
 import com.codeup.codeupspringblog.model.User;
 import com.codeup.codeupspringblog.repositories.PostRepository;
 import com.codeup.codeupspringblog.repositories.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,14 +19,20 @@ public class UserController {
 
     private PostRepository postsDoa;
 
-    public UserController(UserRepository usersDao, PostRepository postsDoa) {
-        this.usersDoa = usersDao;
+    private UserRepository userDao;
+
+    private PasswordEncoder passwordEncoder;
+
+    public UserController(UserRepository usersDoa, PostRepository postsDoa, UserRepository userDao, PasswordEncoder passwordEncoder) {
+        this.usersDoa = usersDoa;
         this.postsDoa = postsDoa;
+        this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/register")
     public String showRegisterForm(){
-        return "users/register";
+        return "sign-up";
     }
 
     @PostMapping("/register")
@@ -50,5 +55,27 @@ public class UserController {
 
     }
 
+    @GetMapping("/sign-up")
+    public String showSignupForm(Model model){
+        model.addAttribute("user", new User());
+        return "users/sign-up";
+    }
 
+    @PostMapping("/sign-up")
+    public String saveUser(@ModelAttribute User user){
+        String hash = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hash);
+        userDao.save(user);
+        return "redirect:/login";
+    }
+
+    @GetMapping("/profile")
+    public String showProfile(Model model){
+        User userLogIn = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(userLogIn.getUsername());
+        User user = usersDoa.findByUsername(userLogIn.getUsername());
+        model.addAttribute("user", user);
+        model.addAttribute("userPosts", postsDoa.findByUser(user));
+        return "users/profile";
+    }
 }

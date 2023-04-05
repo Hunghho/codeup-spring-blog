@@ -6,6 +6,7 @@ import com.codeup.codeupspringblog.repositories.CatsRepository;
 import com.codeup.codeupspringblog.repositories.PostRepository;
 import com.codeup.codeupspringblog.repositories.UserRepository;
 import com.codeup.codeupspringblog.services.EmailService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,8 +82,10 @@ public class PostController {
 //            catSet.addAll(catsToAdd);
 //            post.setCats(catSet);
 //        }
+        // getting user login id
+        User userLogIn = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //hard coding user
-        User user = usersDao.findById(1L);
+        User user = usersDao.findById(userLogIn.getId());
         post.setUser(user);
         //saving post
         postsDoa.save(post);
@@ -99,13 +102,20 @@ public class PostController {
 
     @PostMapping("/posts/{id}/edit")
     public String editPost(@ModelAttribute Post post, @PathVariable long id){
-        Post editPost = postsDoa.findById(id);
-        editPost.setTitle(post.getTitle());
-        editPost.setBody(post.getBody());
+//        Post editPost = postsDoa.findById(id);
+//        editPost.setTitle(post.getTitle());
+//        editPost.setBody(post.getBody());
 //        post = new Post(id, post.getTitle(), post.getBody());
 //        post.setUser(usersDao.findById(2L));
-        postsDoa.save(editPost);
+        User userLogIn = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        post.setUser(userLogIn);
+        postsDoa.save(post);
         return "redirect:/posts";
     }
 
+    @PostMapping("/posts/{id}/delete")
+    public String deletePost(@PathVariable long id){
+        postsDoa.deleteById(id);
+        return "redirect:/profile";
+    }
 }

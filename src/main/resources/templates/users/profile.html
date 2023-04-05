@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="/partials/header :: header">
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<nav th:replace="partials/navbar :: navbar"></nav>
+
+<h1>Profile page</h1>
+<h2 th:text= "'Welcome, '  + ${user.username}"></h2>
+<div th:each="post : ${userPosts}">
+  <a th:href="@{/posts/{id}/edit(id=${post.id})}"><h3 th:text="${post.title}"></h3></a>
+  <p th:text="${post.body}"></p>
+  <div>
+    <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="POST">
+      <input type="hidden" name="delete"/>
+      <button>Delete</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>
